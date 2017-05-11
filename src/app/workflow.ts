@@ -1,4 +1,4 @@
-export class Hero {
+export class Workflow {
   id: number;
   name: string;
 }

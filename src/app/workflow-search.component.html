@@ -1,0 +1,10 @@
+<div id="search-component">
+  <h4>Workflow Search</h4>
+  <input #searchBox id="search-box" (keyup)="search(searchBox.value)" />
+  <div>
+    <div *ngFor="let workflow of workflowes | async"
+         (click)="gotoDetail(workflow)" class="search-result" >
+      {{workflow.name}}
+    </div>
+  </div>
+</div>
