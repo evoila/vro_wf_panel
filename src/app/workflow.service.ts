@@ -1,5 +1,5 @@
 import { Injectable }    from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { Headers, Http, RequestOptions } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -12,6 +12,9 @@ export class WorkflowService {
     let headers = new Headers();
     headers.append('Content-Type','application/json');
     headers.append('Authorization', 'Basic dmNvYWRtaW46dmNvYWRtaW4=');
+    headers.append('Access-Control-Allow-Origin', '*');
+    headers.append('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, If-Modified-Since, Cache-Control, Pragma');
+    headers.append('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     return headers;
   }
   private workflowesUrl = 'https://172.16.167.147:8281/vco/api/workflows';  // URL to web api
@@ -19,7 +22,11 @@ export class WorkflowService {
   constructor(private http: Http) { }
 
   getWorkflowes(): Promise<Workflow[]> {
-    return this.http.get(this.workflowesUrl, {headers: this.headers()})
+    let requestOptions: RequestOptions = new RequestOptions({
+      headers: this.headers(),
+      method: 'GET'
+      });
+    return this.http.request(this.workflowesUrl, requestOptions)
                .toPromise()
                .then(response => this.parseWorkflow(response.json().data))
                .catch(this.handleError);
@@ -41,7 +48,7 @@ export class WorkflowService {
 
   delete(id: number): Promise<void> {
     const url = `${this.workflowesUrl}/${id}`;
-    return this.http.delete(url, {headers: this.headers})
+    return this.http.delete(url, {headers: this.headers()})
       .toPromise()
       .then(() => null)
       .catch(this.handleError);
@@ -49,7 +56,7 @@ export class WorkflowService {
 
   create(name: string): Promise<Workflow> {
     return this.http
-      .post(this.workflowesUrl, JSON.stringify({name: name}), {headers: this.headers})
+      .post(this.workflowesUrl, JSON.stringify({name: name}), {headers: this.headers()})
       .toPromise()
       .then(res => res.json().data as Workflow)
       .catch(this.handleError);
@@ -58,7 +65,7 @@ export class WorkflowService {
   update(workflow: Workflow): Promise<Workflow> {
     const url = `${this.workflowesUrl}/${workflow.id}`;
     return this.http
-      .put(url, JSON.stringify(workflow), {headers: this.headers})
+      .put(url, JSON.stringify(workflow), {headers: this.headers()})
       .toPromise()
       .then(() => workflow)
       .catch(this.handleError);
