@@ -1,6 +1,4 @@
 'use strict';
-var fallback = require('connect-history-api-fallback');
-var log = require('connect-logger');
 var cors = require('cors');
 
 module.exports = {
@@ -10,14 +8,17 @@ module.exports = {
     ignored: 'node_modules'
   },
   server: {
-    baseDir: 'dist',
-    middleware: [
-      log({format: '%date %status %method %url'}),
-      cors(),
-      fallback({
-        index: '/index.html',
-        htmlAcceptHeaders: ['text/html', 'application/xhtml+xml']
-      })
-    ]
+    baseDir: './dist',
+    routes: {
+        "/node_modules": "node_modules"
+    },
+    middleware:
+      function (req, res, next) {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Credentials', true);
+        res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, If-Modified-Since, Cache-Control, Pragma');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+        next();
+      }
   }
 };
