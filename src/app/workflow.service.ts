@@ -12,9 +12,7 @@ export class WorkflowService {
     let headers = new Headers();
     headers.append('Content-Type','application/json');
     headers.append('Authorization', 'Basic dmNvYWRtaW46dmNvYWRtaW4=');
-    headers.append('Access-Control-Allow-Origin', '*');
-    headers.append('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, If-Modified-Since, Cache-Control, Pragma');
-    headers.append('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    //headers.append('Origin', 'http://localhost:3000')
     return headers;
   }
   private workflowesUrl = 'https://172.16.167.147:8281/vco/api/workflows';  // URL to web api
@@ -22,18 +20,22 @@ export class WorkflowService {
   constructor(private http: Http) { }
 
   getWorkflowes(): Promise<Workflow[]> {
-    let requestOptions: RequestOptions = new RequestOptions({
-      headers: this.headers(),
-      method: 'GET'
-      });
-    return this.http.request(this.workflowesUrl, requestOptions)
-               .toPromise()
-               .then(response => this.parseWorkflow(response.json().data))
-               .catch(this.handleError);
+
+    this.parseWorkflow()
+    return null;
   }
 
-  private parseWorkflow(workflowObject : any) : Workflow[] {
-    console.log(workflowObject);
+  private parseWorkflow() : Workflow[] {
+    let requestOptions: RequestOptions = new RequestOptions({
+      headers: this.headers(),
+      withCredentials: true,
+      method: 'GET'
+    });
+    var responseResult = this.http.request(this.workflowesUrl, requestOptions)
+               .toPromise()
+               .then(response => response.json().data)
+               .catch(this.handleError);
+    console.log(responseResult)
     return [new Workflow()];
   }
 
