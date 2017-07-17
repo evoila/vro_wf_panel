@@ -1,32 +1,39 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
-import { HttpModule }    from '@angular/http';
+import { HttpModule, JsonpModule } from '@angular/http';
+import {
+  MdButtonModule,
+  MdCardModule,
+  MdGridListModule
+}        from '@angular/material';
 
-import { AppRoutingModule } from './app-routing.module';
+import { requestOptionsProvider }   from './default-request-options.service';
 
-import { AppComponent }         from './app.component';
-import { DashboardComponent }   from './dashboard.component';
-import { WorkflowesComponent }      from './workflowes.component';
-import { WorkflowDetailComponent }  from './workflow-detail.component';
-import { WorkflowService }          from './workflow.service';
-import { WorkflowSearchComponent }  from './workflow-search.component';
+import { AppComponent }             from './app.component';
+
+import { WorkflowListComponent }    from './toh/workflow-list.component';
+
 
 @NgModule({
+  exports: [
+    MdGridListModule
+  ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    AppRoutingModule
+    JsonpModule,
+    MdCardModule, MdButtonModule
   ],
   declarations: [
     AppComponent,
-    DashboardComponent,
-    WorkflowDetailComponent,
-    WorkflowesComponent,
-    WorkflowSearchComponent
+    WorkflowListComponent
   ],
-  providers: [ WorkflowService ],
+  providers: [ requestOptionsProvider ],
   bootstrap: [ AppComponent ]
 })
-export class AppModule { }
+export class AppModule {}
+
+
+

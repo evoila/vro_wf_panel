@@ -1,0 +1,25 @@
+<h1>Workflows ({{mode}})</h1>
+<ul>
+  <li *ngFor="let workflow of workflows">{{workflow.name}} - <a (click)="runWorkflow(workflow.sid)">Run without parameter</a></li>
+</ul>
+<md-grid-list gutterSize="10px">
+  <md-grid-tile *ngFor="let workflow of workflows">
+    <md-card>
+      <md-card-header>
+        <md-card-title>{{workflow.name}}</md-card-title>
+        <md-card-subtitle>Beschreibung{{workflow.description}}</md-card-subtitle>
+      </md-card-header>
+      <md-card-content>
+        <p>
+          {{workflow.description}}
+        </p>
+      </md-card-content>
+      <md-card-actions>
+        <button md-button (click)="runWorkflow(workflow.sid)">RUN</button>
+        <button md-button>FUN</button>
+      </md-card-actions>
+    </md-card>
+  </md-grid-tile>
+</md-grid-list>
+
+<p class="error" *ngIf="errorMessage">{{errorMessage}}</p>

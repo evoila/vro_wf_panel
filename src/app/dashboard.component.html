@@ -1,9 +1,0 @@
-<h3>Top Workflowes</h3>
-<div class="grid grid-pad">
-  <a *ngFor="let workflow of workflowes"  [routerLink]="['/detail', workflow.id]"  class="col-1-4">
-    <div class="module workflow">
-      <h4>{{workflow.name}}</h4>
-    </div>
-  </a>
-</div>
-<workflow-search></workflow-search>
