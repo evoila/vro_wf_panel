@@ -1,22 +1,22 @@
 // Observable Version
-import { Injectable }              from '@angular/core';
-import { Http, Response }          from '@angular/http';
-import { Headers, RequestOptions } from '@angular/http';
+import { Injectable }                 from '@angular/core';
+import { Http, Response }           from '@angular/http';
+import { Headers, RequestOptions }  from '@angular/http';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable }               from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw'
 
-import { Workflow } from './workflow';
-import { AppConfigService } from '../app-config.service'
+import { Workflow }                 from './workflow';
+import { AppConfigService }         from '../app-config.service'
 
 @Injectable()
-export class WorkflowService {
+export class WorkflowPresentationService {
 
   constructor (private http: Http, private config: AppConfigService) {}
 
-  getWorkflows(): Observable<Workflow[]> {
+  getWorkflowPresentation(): Observable<Workflow[]> {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', 'Basic dmNvYWRtaW46dmNvYWRtaW4=');
     let params:URLSearchParams = new URLSearchParams();
@@ -33,6 +33,7 @@ export class WorkflowService {
 
   private extractData(res: Response) {
     let body = res.json();
+    //let myJson = JSON.parse(body);
     let count = 0;
     let items: Workflow[] = [];
     for (let link of body.link) {

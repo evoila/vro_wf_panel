@@ -2,9 +2,12 @@
 import { Component, OnInit }  from '@angular/core';
 import { Workflow }           from './workflow';
 import { WorkflowService }    from './workflow.service';
+import { WorkflowRunDialogComponent } from './workflow-run-dialog.component'
 import {  MdCardModule, 
           MdButtonModule, 
-          MdGridListModule }  from '@angular/material';
+          MdGridListModule,
+          MdDialog, 
+          MdDialogRef}        from '@angular/material';
 
 @Component({
   selector: 'workflow-list',
@@ -18,7 +21,8 @@ export class WorkflowListComponent implements OnInit {
   newWorkflow: Workflow;
   mode = 'Observable';
 
-  constructor (private workflowService: WorkflowService) {}
+  constructor (private workflowService: WorkflowService, public dialog:MdDialog) {
+  } 
 
   ngOnInit() { this.getWorkflows(); }
 
@@ -36,11 +40,11 @@ export class WorkflowListComponent implements OnInit {
                             error =>  this.errorMessage = <any>error);
   }
 
-  addWorkflow(name: string) {
-    if (!name) { return; }
-    this.workflowService.create(name)
-                     .subscribe(
-                       workflow  => this.workflows.push(workflow),
-                       error =>  this.errorMessage = <any>error);
+  openDialog(sid:string) {
+    let dialogRef = this.dialog.open(WorkflowRunDialogComponent);
+    dialogRef.componentInstance.loadWorkflow(sid);
+    dialogRef.afterClosed().subscribe(result => {
+      //this.selectedOption = result;
+    });
   }
 }

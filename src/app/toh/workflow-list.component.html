@@ -16,7 +16,7 @@
       </md-card-content>
       <md-card-actions>
         <button md-button (click)="runWorkflow(workflow.sid)">RUN</button>
-        <button md-button>FUN</button>
+        <button md-button (click)="openDialog(workflow.sid)">FUN</button>
       </md-card-actions>
     </md-card>
   </md-grid-tile>
