@@ -36,7 +36,7 @@ export class WorkflowService {
     let count = 0;
     let items: Workflow[] = [];
     for (let link of body.link) {
-      let newItem: Workflow = { name: "", sid: "", id: 0};
+      let newItem: Workflow = new Workflow();
       for (let attr of link.attributes) {
         if (attr.name == "name") newItem.name = attr.value;
         if (attr.name == "id") newItem.sid = attr.value;

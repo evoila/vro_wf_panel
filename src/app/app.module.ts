@@ -8,22 +8,20 @@ import {
   MdButtonModule,
   MdCardModule,
   MdGridListModule,
-  MdDialogModule
+  MdDialogModule,
+  MdTabsModule,
+  MdInputModule
 }        from '@angular/material';
 
 import { requestOptionsProvider }   from './default-request-options.service';
 
 import { AppComponent }             from './app.component';
+import { AppConfigService }         from './app-config.service';
 
 import { WorkflowListComponent }    from './toh/workflow-list.component';
 import { WorkflowRunDialogComponent }    from './toh/workflow-run-dialog.component';
 
-
-
 @NgModule({
-  exports: [
-    MdGridListModule
-  ],
   imports: [
     CdkTableModule,
     BrowserModule,
@@ -31,7 +29,7 @@ import { WorkflowRunDialogComponent }    from './toh/workflow-run-dialog.compone
     FormsModule,
     HttpModule,
     JsonpModule,
-    MdCardModule, MdButtonModule, MdDialogModule
+    MdCardModule, MdButtonModule, MdDialogModule, MdTabsModule, MdInputModule, MdGridListModule
   ],
   declarations: [
     AppComponent,

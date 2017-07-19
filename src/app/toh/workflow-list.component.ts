@@ -41,7 +41,10 @@ export class WorkflowListComponent implements OnInit {
   }
 
   openDialog(sid:string) {
-    let dialogRef = this.dialog.open(WorkflowRunDialogComponent);
+    let dialogRef = this.dialog.open(WorkflowRunDialogComponent, {
+      height: '85%',
+      width: '85%',
+    });
     dialogRef.componentInstance.loadWorkflow(sid);
     dialogRef.afterClosed().subscribe(result => {
       //this.selectedOption = result;

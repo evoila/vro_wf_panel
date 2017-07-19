@@ -8,7 +8,11 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw'
 
-import { Workflow }                 from './workflow';
+import {  WfPresentation,
+          WfPresentationStep,
+          WfPresentationField,
+          WfPresentationGroup }     from './workflow-presentation';
+import { Workflow }                 from './workflow'
 import { AppConfigService }         from '../app-config.service'
 
 @Injectable()
@@ -16,7 +20,7 @@ export class WorkflowPresentationService {
 
   constructor (private http: Http, private config: AppConfigService) {}
 
-  getWorkflowPresentation(): Observable<Workflow[]> {
+  getWorkflowPresentation(sid:string): Observable<WfPresentation> {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     headers.append('Authorization', 'Basic dmNvYWRtaW46dmNvYWRtaW4=');
     let params:URLSearchParams = new URLSearchParams();
@@ -26,28 +30,49 @@ export class WorkflowPresentationService {
       params:params});
 
     //ToDo: make parameter generic
-    return this.http.get(this.config.workflowsUrl+"?conditions=categoryName%3Dtest", options)
+    return this.http.get(this.config.workflowsUrl+sid+"/presentation/", options)
                     .map(this.extractData)
                     .catch(this.handleError);
   }
 
   private extractData(res: Response) {
     let body = res.json();
+    console.log("body: "+body.toString());
     //let myJson = JSON.parse(body);
+    //console.log(myJson);
     let count = 0;
-    let items: Workflow[] = [];
-    for (let link of body.link) {
-      let newItem: Workflow = { name: "", sid: "", id: 0};
-      for (let attr of link.attributes) {
-        if (attr.name == "name") newItem.name = attr.value;
-        if (attr.name == "id") newItem.sid = attr.value;
+    let presentation : WfPresentation = new WfPresentation(body.name, body.id);
+    presentation.steps = [];
+    console.log("beforeStep");
+    body.steps.forEach((step: any, index: number) => {
+      let newStep: WfPresentationStep = new WfPresentationStep();
+      newStep.groups = [];
+      if (step.step["display-name"]) {
+        newStep.name = step.step["display-name"];
+      } else {
+        let pos = index+1;
+        newStep.name = "Step "+pos;
       }
-      count++;
-      if (count < 10)
-        items.push(newItem);
-    };
-
-    return items || { };
+      console.log("beforeGroup");
+      for (let group of step.step.elements) {
+        let newGroup: WfPresentationGroup = new WfPresentationGroup();
+        newGroup.fields = [];
+        newGroup.name = group["display-name"];
+        console.log("GroupName: "+group["display-name"]);
+        for (let field of group.fields) {
+          let newField : WfPresentationField = new WfPresentationField("-1");
+          newField.name         = field["display-name"];
+          newField.id           = field.id;
+          newField.type         = field.type;
+          newField.description  = field.description;
+          newGroup.fields.push(newField);
+        }
+        newStep.groups.push(newGroup);
+      }
+      presentation.steps.push(newStep);
+    });
+    console.log(presentation)
+    return presentation || { };
   }
 
   runWorkflow(sid:string): Observable<Workflow> {

@@ -1,23 +1,22 @@
-<h1 md-dialog-title>Dialog</h1>
-<div md-dialog-content>What would you like to do?
-<md-tab-group>
-  <md-tab label="One">
-    <h1>{{workflowSid}}</h1>
-    <p>...</p>
-  </md-tab>
-  <md-tab label="Two">
-    <h1>Some more tab content</h1>
-    <p>...</p>
-  </md-tab>
-</md-tab-group>
+<h1 md-dialog-title>{{presentation.name}}</h1>
+<div md-dialog-content>
+  <md-tab-group>
+    <md-tab *ngFor="let step of presentation.steps" label="{{step.name}}">
+      <div *ngFor="let group of step.groups" >
+        <h4 ng-show="step.name">{{group.name}}</h4>
+        <form>
+          <md-input-container *ngFor="let field of group.fields" style="width: 100%" >
+            <input mdInput placeholder="{{field.name}}" >
+          </md-input-container>
+        </form>
+      </div>
+    </md-tab>
+    <md-tab label="JSON">
+      <pre>hello {{ presentation | json }}</pre>
+    </md-tab>
+  </md-tab-group>
 </div>
 <div md-dialog-actions>
-  <button md-button md-dialog-close="Option 1">Option 1</button>
-  <button md-button md-dialog-close="Option 2">Option 2</button>
-    <button md-button md-dialog-close="Option 1">Option 1</button>
-  <button md-button md-dialog-close="Option 2">Option 2</button>
-    <button md-button md-dialog-close="Option 1">Option 1</button>
-  <button md-button md-dialog-close="Option 2">Option 2</button>
-    <button md-button md-dialog-close="Option 1">Option 1</button>
-  <button md-button md-dialog-close="Option 2">Option 2</button>
+  <button md-button md-dialog-close="Next">Next</button>
+  <button md-button md-dialog-close="Run">Run</button>
 </div>
